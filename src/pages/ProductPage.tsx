@@ -86,16 +86,16 @@ const ProductPage = () => {
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
-          {/* Кнопка возврата на главную слева сверху */}
-          <Link
-            to="/"
-            className="absolute top-16 left-4 text-white text-2xl bg-black p-3 rounded-full border border-gray-300 hover:bg-gray-800"
-          >
-            &#8592; {/* Стрелка влево */}
-          </Link>
+          {/* Кнопка возврата на главную слева сверху (правее на картинке) */}
+          <div className="relative w-full md:w-1/3">
+            <Link
+              to="/"
+              className="absolute top-4 left-4 text-white text-2xl bg-black p-3 rounded-full border border-gray-300 hover:bg-gray-800"
+            >
+              &#8592; {/* Стрелка влево */}
+            </Link>
 
-          {/* Слайдер изображений */}
-          <div className="w-full md:w-1/3 relative">
+            {/* Слайдер изображений */}
             <img
               src={product.images[currentImage]}
               alt={`${product.name} - изображение ${currentImage + 1}`}
