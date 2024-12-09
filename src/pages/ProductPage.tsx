@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 const products = [
@@ -24,6 +24,7 @@ const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
   const [currentImage, setCurrentImage] = useState<number>(0); // Индекс текущего изображения
+  const timerRef = useRef<NodeJS.Timeout | null>(null); // Хранение ссылки на таймер
 
   useEffect(() => {
     if (id) {
@@ -35,24 +36,45 @@ const ProductPage = () => {
   useEffect(() => {
     if (!product || product.images.length <= 1) return;
 
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % product.images.length); // Автопереключение
-    }, 3000); // Интервал 3 секунды
+    const startTimer = () => {
+      timerRef.current = setInterval(() => {
+        setCurrentImage((prev) => (prev + 1) % product.images.length); // Автопереключение
+      }, 3000);
+    };
 
-    return () => clearInterval(interval); // Очистка таймера при размонтировании компонента
+    startTimer();
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current); // Очистка таймера при размонтировании компонента
+      }
+    };
   }, [product]);
+
+  const resetTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current); // Очистка текущего таймера
+    }
+    if (product && product.images.length > 1) {
+      timerRef.current = setInterval(() => {
+        setCurrentImage((prev) => (prev + 1) % product.images.length); // Новый таймер
+      }, 3000);
+    }
+  };
+
+  const handleNextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % product.images.length);
+    resetTimer(); // Обнуление таймера
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
+    resetTimer(); // Обнуление таймера
+  };
 
   if (!product) {
     return <p>Товар не найден</p>;
   }
-
-  const handleNextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % product.images.length); // Переход к следующему изображению
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length); // Переход к предыдущему
-  };
 
   return (
     <div className="min-h-screen bg-white">
