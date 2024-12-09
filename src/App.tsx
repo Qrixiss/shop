@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import { CartProvider } from './CartContext';
 import CartPage from "./pages/CartPage";
 import ProductPage from "./pages/ProductPage";
 
@@ -16,13 +15,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <CartProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/product/:id" element={<ProductPage />} />  {/* Страница товара */}
-          </Routes>
-          </CartProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/product/:id" element={<ProductPage />} />  {/* Страница товара */}
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

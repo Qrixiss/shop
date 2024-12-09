@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCart } from './CartContext';
 
+// Пример товаров
 const products = [
   {
     id: 2,
@@ -23,10 +23,9 @@ const products = [
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { addToCart } = useCart();
   const [product, setProduct] = useState<any>(null);
   const [currentImage, setCurrentImage] = useState<number>(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [cart, setCart] = useState<any[]>([]); // Состояние для корзины
 
   useEffect(() => {
     if (id) {
@@ -35,9 +34,30 @@ const ProductPage = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    // Получение корзины из localStorage
+    const storedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCart(storedCart);
+  }, []);
+
   const handleAddToCart = () => {
     if (product) {
-      addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+      const existingProduct = cart.find((item) => item.id === product.id);
+      if (existingProduct) {
+        // Если товар уже в корзине, увеличиваем количество
+        const updatedCart = cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart)); // Сохраняем в localStorage
+      } else {
+        // Если товара нет в корзине, добавляем новый товар
+        const newCart = [...cart, { ...product, quantity: 1 }];
+        setCart(newCart);
+        localStorage.setItem('cart', JSON.stringify(newCart)); // Сохраняем в localStorage
+      }
       alert(`${product.name} добавлен в корзину!`);
     }
   };
