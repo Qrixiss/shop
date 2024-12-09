@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
+// Пример товаров
 const products = [
   {
     id: 2,
@@ -23,8 +24,8 @@ const products = [
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
-  const [currentImage, setCurrentImage] = useState<number>(0); // Индекс текущего изображения
-  const timerRef = useRef<NodeJS.Timeout | null>(null); // Хранение ссылки на таймер
+  const [currentImage, setCurrentImage] = useState<number>(0);
+  const [cart, setCart] = useState<any[]>([]); // Состояние для корзины
 
   useEffect(() => {
     if (id) {
@@ -34,42 +35,31 @@ const ProductPage = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!product || product.images.length <= 1) return;
+    // Получение корзины из localStorage
+    const storedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCart(storedCart);
+  }, []);
 
-    const startTimer = () => {
-      timerRef.current = setInterval(() => {
-        setCurrentImage((prev) => (prev + 1) % product.images.length); // Автопереключение
-      }, 3000);
-    };
-
-    startTimer();
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current); // Очистка таймера при размонтировании компонента
+  const handleAddToCart = () => {
+    if (product) {
+      const existingProduct = cart.find((item) => item.id === product.id);
+      if (existingProduct) {
+        // Если товар уже в корзине, увеличиваем количество
+        const updatedCart = cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart)); // Сохраняем в localStorage
+      } else {
+        // Если товара нет в корзине, добавляем новый товар
+        const newCart = [...cart, { ...product, quantity: 1 }];
+        setCart(newCart);
+        localStorage.setItem('cart', JSON.stringify(newCart)); // Сохраняем в localStorage
       }
-    };
-  }, [product]);
-
-  const resetTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current); // Очистка текущего таймера
+      alert(`${product.name} добавлен в корзину!`);
     }
-    if (product && product.images.length > 1) {
-      timerRef.current = setInterval(() => {
-        setCurrentImage((prev) => (prev + 1) % product.images.length); // Новый таймер
-      }, 3000);
-    }
-  };
-
-  const handleNextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % product.images.length);
-    resetTimer(); // Обнуление таймера
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length);
-    resetTimer(); // Обнуление таймера
   };
 
   if (!product) {
@@ -86,14 +76,13 @@ const ProductPage = () => {
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
-          {/* Кнопка возврата на главную слева сверху */}
-          <Link
+            {/* Кнопка возврата на главную слева сверху */}
+            <Link
             to="/"
             className="absolute top-16 left-4 text-white text-2xl bg-black p-3 rounded-full border border-gray-300 hover:bg-gray-800"
           >
             &#8592; {/* Стрелка влево */}
           </Link>
-
           {/* Слайдер изображений */}
           <div className="w-full md:w-1/3 relative">
             <img
@@ -101,21 +90,8 @@ const ProductPage = () => {
               alt={`${product.name} - изображение ${currentImage + 1}`}
               className="w-full h-auto object-cover rounded-md mb-4"
             />
-            <button
-              onClick={handlePrevImage}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded-full"
-            >
-              &lt;
-            </button>
-            <button
-              onClick={handleNextImage}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded-full"
-            >
-              &gt;
-            </button>
           </div>
 
-          {/* Описание товара */}
           <div className="md:ml-6">
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             <p className="text-gray-600 mb-4">{product.description}</p>
