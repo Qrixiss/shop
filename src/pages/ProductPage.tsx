@@ -5,36 +5,54 @@ const products = [
   {
     id: 2,
     name: 'Цепочка SEXSOUND W',
-    description: 'Цепочка "SEXSOUND W" станет универсальным дополнением к любому образу — будь то повседневный стиль или вечерний наряд. Она отлично смотрится как самостоятельно, так и в сочетании с подвесками или другими аксессуарами вашего выбора.',
+    description: 'Цепочка "SEXSOUND W" станет универсальным дополнением к любому образу...',
     price: 2500,
     material: 'Высококачественная сталь и белоснежные бусы',
-    image: '/imgs/woman.jpg',
+    images: ['/imgs/woman.jpg', '/imgs/woman_side.jpg', '/imgs/woman_close.jpg'],
   },
   {
     id: 3,
     name: 'Цепочка SEXSOUND M',
-    description: 'Погрузитесь в мир утончённого стиля с нашей цепочкой из высококачественной стали. Этот аксессуар идеально сочетает в себе прочность и элегантность, подчеркивая вашу индивидуальность. Каждое звено цепочки тщательно обработано, чтобы обеспечить гладкость и комфорт при носке.',
+    description: 'Погрузитесь в мир утончённого стиля с нашей цепочкой...',
     price: 2500,
     material: 'Высококачественная сталь',
-    image: '/imgs/man.jpg',
+    images: ['/imgs/man.jpg', '/imgs/man_side.jpg', '/imgs/man_close.jpg'],
   },
 ];
 
 const ProductPage = () => {
-  const { id } = useParams<{ id: string }>();  // Получаем id товара из URL
+  const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
+  const [currentImage, setCurrentImage] = useState<number>(0); // Индекс текущего изображения
 
   useEffect(() => {
     if (id) {
-      // Ищем товар с соответствующим id
       const foundProduct = products.find((product) => product.id === Number(id));
-      setProduct(foundProduct);  // Обновляем состояние с найденным товаром
+      setProduct(foundProduct);
     }
   }, [id]);
 
+  useEffect(() => {
+    if (!product || product.images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % product.images.length); // Автопереключение
+    }, 3000); // Интервал 3 секунды
+
+    return () => clearInterval(interval); // Очистка таймера при размонтировании компонента
+  }, [product]);
+
   if (!product) {
-    return <p>Товар не найден</p>;  // Если товар не найден
+    return <p>Товар не найден</p>;
   }
+
+  const handleNextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % product.images.length); // Переход к следующему изображению
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length); // Переход к предыдущему
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -46,7 +64,28 @@ const ProductPage = () => {
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
-          <img src={product.image} alt={product.name} className="w-full md:w-1/3 h-auto object-cover rounded-md mb-4 md:mb-0" />
+          {/* Слайдер изображений */}
+          <div className="w-full md:w-1/3 relative">
+            <img
+              src={product.images[currentImage]}
+              alt={`${product.name} - изображение ${currentImage + 1}`}
+              className="w-full h-auto object-cover rounded-md mb-4"
+            />
+            <button
+              onClick={handlePrevImage}
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded-full"
+            >
+              &lt;
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded-full"
+            >
+              &gt;
+            </button>
+          </div>
+
+          {/* Описание товара */}
           <div className="md:ml-6">
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             <p className="text-gray-600 mb-4">{product.description}</p>
