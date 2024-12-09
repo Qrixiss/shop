@@ -8,10 +8,19 @@ const CartPage = () => {
     { id: 3, name: 'Цепочка SEXSOUND M', price: 2500, image: '/imgs/man.jpg' },
   ]);
 
-  // Загружаем корзину из localStorage при загрузке страницы
+  // Загружаем корзину из localStorage при монтировании компонента
   useEffect(() => {
-    const savedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-    setCartItems(savedCartItems);
+    const loadCart = () => {
+      const savedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      setCartItems(savedCartItems);
+    };
+
+    loadCart();
+    window.addEventListener('cartUpdated', loadCart); // Подписка на событие
+
+    return () => {
+      window.removeEventListener('cartUpdated', loadCart); // Отписка при размонтировании
+    };
   }, []);
 
   // Удалить товар из корзины
@@ -19,11 +28,10 @@ const CartPage = () => {
     const updatedCart = cartItems.filter((item) => item !== productId);
     setCartItems(updatedCart);
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event('cartUpdated')); // Генерация события
   };
 
   const cartProducts = products.filter((product) => cartItems.includes(product.id));
-
-  // Подсчет общей суммы товаров в корзине
   const totalAmount = cartProducts.reduce((total, product) => total + product.price, 0);
 
   return (
@@ -55,12 +63,9 @@ const CartPage = () => {
         )}
 
         <div className="flex items-center justify-between mt-4">
-          {/* Кнопка возврата на главную */}
           <Link to="/" className="bg-black text-white p-2 rounded-md">
             Вернуться на главную
           </Link>
-
-          {/* Общая сумма корзины в черном квадрате */}
           <div className="bg-black text-white p-4 rounded-md text-center min-w-[100px]">
             {Math.round(totalAmount)} руб.
           </div>

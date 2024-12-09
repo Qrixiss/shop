@@ -3,34 +3,26 @@ import { Link } from 'react-router-dom';
 import CartButton from '@/components/CartButton';
 
 const products = [
-  { id: 2, name: 'Цепочка SEXSOUND W', description: 'Стильная женская цепочка...', price: 2500, image: '/imgs/woman.jpg' },
-  { id: 3, name: 'Цепочка SEXSOUND M', description: 'Мужская цепочка...', price: 2500, image: '/imgs/man.jpg' },
+  { id: 2, name: 'Цепочка SEXSOUND W', description: 'Цепочка "SEXSOUND W" станет...', price: 2500, image: '/imgs/woman.jpg' },
+  { id: 3, name: 'Цепочка SEXSOUND M', description: 'Погрузитесь в мир утончённого...', price: 2500, image: '/imgs/man.jpg' },
 ];
 
 const Index = () => {
-  const [cartItems, setCartItems] = useState<number[]>([]);
+  const [cartItems, setCartItems] = useState<number[]>(() => {
+    return JSON.parse(localStorage.getItem('cartItems') || '[]'); // Инициализация из localStorage
+  });
 
-  // Загружаем корзину из localStorage при загрузке страницы
   useEffect(() => {
-    const savedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-    setCartItems(savedCartItems);
-  }, []);
-
-  // Обновляем корзину в localStorage при изменении состояния корзины
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    }
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    window.dispatchEvent(new Event('cartUpdated')); // Генерация события
   }, [cartItems]);
 
   const handleToggleCartItem = (productId: number) => {
     setCartItems((prevCartItems) => {
       if (prevCartItems.includes(productId)) {
-        // Если товар уже в корзине, удаляем его
-        return prevCartItems.filter((id) => id !== productId);
+        return prevCartItems.filter((id) => id !== productId); // Удаляем товар
       } else {
-        // Если товара нет в корзине, добавляем его
-        return [...prevCartItems, productId];
+        return [...prevCartItems, productId]; // Добавляем товар
       }
     });
   };
@@ -58,7 +50,7 @@ const Index = () => {
               </Link>
 
               <div className="flex flex-col justify-between mt-auto">
-                <p className="text-xl font-bold mb-2">{product.price} руб.</p> {/* Цена идет перед кнопкой */}
+                <p className="text-xl font-bold mb-2">{product.price} руб.</p>
                 <button
                   onClick={() => handleToggleCartItem(product.id)}
                   className={`px-4 py-2 text-white font-semibold rounded-lg ${
