@@ -23,7 +23,7 @@ const products = [
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { addToCart } = useCart(); // Используем функцию из контекста
+  const { addToCart } = useCart();
   const [product, setProduct] = useState<any>(null);
   const [currentImage, setCurrentImage] = useState<number>(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -56,7 +56,6 @@ const ProductPage = () => {
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
-          {/* Слайдер изображений */}
           <div className="w-full md:w-1/3 relative">
             <img
               src={product.images[currentImage]}
@@ -65,7 +64,6 @@ const ProductPage = () => {
             />
           </div>
 
-          {/* Описание товара */}
           <div className="md:ml-6">
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             <p className="text-gray-600 mb-4">{product.description}</p>

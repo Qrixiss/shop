@@ -15,15 +15,15 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <CartProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <CartProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/product/:id" element={<ProductPage />} />  {/* Страница товара */}
           </Routes>
-        </BrowserRouter>
-        </CartProvider>
+          </CartProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
