@@ -86,6 +86,14 @@ const ProductPage = () => {
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
+          {/* Кнопка возврата на главную слева сверху */}
+          <Link
+            to="/"
+            className="absolute top-16 left-4 text-white text-2xl bg-black p-3 rounded-full border border-gray-300 hover:bg-gray-800"
+          >
+            &#8592; {/* Стрелка влево */}
+          </Link>
+
           {/* Слайдер изображений */}
           <div className="w-full md:w-1/3 relative">
             <img
@@ -113,9 +121,6 @@ const ProductPage = () => {
             <p className="text-gray-600 mb-4">{product.description}</p>
             <p className="text-lg font-bold mb-4">Цена: {product.price} руб.</p>
             <p className="mb-4"><strong>Материал:</strong> {product.material}</p>
-            <Link to="/" className="inline-block px-6 py-2 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
-              Вернуться на главную
-            </Link>
           </div>
         </div>
       </main>
