@@ -52,7 +52,7 @@ const CartPage = () => {
                 <img src={product.image} alt={product.name} className="w-16 h-16 object-cover mr-4" />
                 <div>
                   <p>{product.name}</p>
-                  <p>{product.price} руб.</p>
+                  <p>{product.price} ₽</p>
                 </div>
                 <button onClick={() => removeFromCart(product.id)} className="text-red-500">
                   Удалить
@@ -67,7 +67,7 @@ const CartPage = () => {
             Вернуться на главную
           </Link>
           <div className="bg-black text-white p-4 rounded-md text-center min-w-[100px]">
-            {Math.round(totalAmount)} руб.
+            {Math.round(totalAmount)} ₽
           </div>
         </div>
       </main>
