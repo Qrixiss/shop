@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import CartButton from '@/components/CartButton';
 
 const products = [
   {
@@ -80,9 +81,13 @@ const ProductPage = () => {
     <div className="min-h-screen bg-white">
       <header className="bg-secondary shadow-sm">
         <div className="container mx-auto px-2 py-2 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-primary">{product.name}</h1>
+          {/* Заменяем текст на логотип */}
+          <Link to="/">
+            <img src="public/imgs/logotip.png" alt="Sold Soul" className="h-12" />
+          </Link>
         </div>
       </header>
+      
 
       <main className="container mx-auto px-2 py-4">
         <div className="flex flex-col md:flex-row">
