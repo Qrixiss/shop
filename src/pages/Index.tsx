@@ -31,7 +31,10 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <header className="bg-secondary shadow-sm">
         <div className="container mx-auto px-2 py-2 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-primary">SOLD SOUL</h1>
+          {/* Заменяем текст на логотип */}
+          <Link to="/">
+            <img src="public/imgs/logo_mini.png" alt="Sold Soul" className="h-12" />
+          </Link>
           <CartButton itemCount={cartItems.length} />
         </div>
       </header>

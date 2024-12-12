@@ -34,7 +34,7 @@ const CartPage = () => {
 
   // Создаем URL для перехода в Telegram
   const botUsername = 'Qrixisshop_bot'; // Замените на имя вашего бота
-  const telegramUrl = `https://t.me/Qrixisshop_bot?start=total=5000&items=["Товар 1","Товар 2"]`;
+  const telegramUrl = `https://t.me/Qrixisshop_bot?start=total=${totalAmount}&items=["Товар 1","Товар 2"]`;
 
   return (
     <div className="min-h-screen bg-white">
