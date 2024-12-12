@@ -40,14 +40,12 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-secondary shadow-sm">
-        <div className="container mx-auto px-2 py-2 flex justify-between items-center">
-          {/* Заменяем текст на логотип */}
-          <Link to="/">
-            <img src="imgs/logotip.png" alt="Sold Soul" className="h-12" />
-          </Link>
-          <CartButton itemCount={cartItems.length} />
-        </div>
-      </header>
+              <div className="container mx-auto px-2 py-2 flex justify-center items-center">
+                <Link to="/">
+                  <img src="/imgs/logotip.png" alt="Sold Soul" className="h-12" />
+                </Link>
+              </div>
+            </header>
 
       <main className="container mx-auto px-2 py-4">
         {cartProducts.length === 0 ? (
