@@ -43,7 +43,7 @@ const CartPage = () => {
         <div className="container mx-auto px-2 py-2 flex justify-between items-center">
           {/* Заменяем текст на логотип */}
           <Link to="/">
-            <img src="public/imgs/logotip.png" alt="Sold Soul" className="h-12" />
+            <img src="imgs/logotip.png" alt="Sold Soul" className="h-12" />
           </Link>
           <CartButton itemCount={cartItems.length} />
         </div>
