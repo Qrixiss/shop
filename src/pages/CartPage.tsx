@@ -8,7 +8,6 @@ const CartPage = () => {
     { id: 3, name: 'Цепочка SEXSOUND M', price: 2500, image: '/imgs/man.jpg' },
   ]);
 
-  // Загружаем корзину из localStorage при монтировании компонента
   useEffect(() => {
     const loadCart = () => {
       const savedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
@@ -16,23 +15,26 @@ const CartPage = () => {
     };
 
     loadCart();
-    window.addEventListener('cartUpdated', loadCart); // Подписка на событие
+    window.addEventListener('cartUpdated', loadCart);
 
     return () => {
-      window.removeEventListener('cartUpdated', loadCart); // Отписка при размонтировании
+      window.removeEventListener('cartUpdated', loadCart);
     };
   }, []);
 
-  // Удалить товар из корзины
   const removeFromCart = (productId: number) => {
     const updatedCart = cartItems.filter((item) => item !== productId);
     setCartItems(updatedCart);
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
-    window.dispatchEvent(new Event('cartUpdated')); // Генерация события
+    window.dispatchEvent(new Event('cartUpdated'));
   };
 
   const cartProducts = products.filter((product) => cartItems.includes(product.id));
   const totalAmount = cartProducts.reduce((total, product) => total + product.price, 0);
+
+  // Создаем URL для перехода в Telegram
+  const botUsername = 'Qrixisshop_bot'; // Замените на имя вашего бота
+  const telegramUrl = `https://t.me/Qrixisshop_bot?start=total=5000&items=["Товар 1","Товар 2"]`;
 
   return (
     <div className="min-h-screen bg-white">
@@ -70,6 +72,18 @@ const CartPage = () => {
             {Math.round(totalAmount)} ₽
           </div>
         </div>
+
+        {/* Кнопка перехода в Telegram */}
+        {cartProducts.length > 0 && (
+          <a
+            href={telegramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block bg-blue-500 text-white text-center p-2 rounded-md mt-4"
+          >
+            Перейти к оформлению в Telegram
+          </a>
+        )}
       </main>
     </div>
   );

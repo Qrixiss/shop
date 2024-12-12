@@ -31,7 +31,7 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <header className="bg-secondary shadow-sm">
         <div className="container mx-auto px-2 py-2 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-primary">QRIXISSHOP</h1>
+          <h1 className="text-xl font-bold text-primary">SOLD SOUL</h1>
           <CartButton itemCount={cartItems.length} />
         </div>
       </header>
@@ -50,7 +50,7 @@ const Index = () => {
               </Link>
 
               <div className="flex flex-col justify-between mt-auto">
-                <p className="text-xl font-bold mb-2">{product.price} руб.</p>
+                <p className="text-xl font-bold mb-2">{product.price} ₽</p>
                 <button
                   onClick={() => handleToggleCartItem(product.id)}
                   className={`px-4 py-2 text-white font-semibold rounded-lg ${

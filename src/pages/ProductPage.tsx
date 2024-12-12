@@ -119,7 +119,7 @@ const ProductPage = () => {
           <div className="md:ml-6">
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             <p className="text-gray-600 mb-4">{product.description}</p>
-            <p className="text-lg font-bold mb-4">Цена: {product.price} руб.</p>
+            <p className="text-lg font-bold mb-4">Цена: {product.price} ₽</p>
             <p className="mb-4"><strong>Материал:</strong> {product.material}</p>
           </div>
         </div>
@@ -129,3 +129,4 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+ 
